@@ -16,11 +16,10 @@ const TodoForm = ({ onAdd }) => {
         priority: 'Medium',
     });
     const [mode, setMode] = useState('Add');
-    const [disabled, setDisabled] = useState(false);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-        setFormData(prev => ({
+        setFormData((prev) => ({
             ...prev,
             [name]: type === 'checkbox' ? checked : value,
         }));
@@ -35,24 +34,26 @@ const TodoForm = ({ onAdd }) => {
 
         const todoData = {
             ...formData,
-            dueDate: formData.dueDate ? new Date(formData.dueDate) : null
+            dueDate: formData.dueDate ? new Date(formData.dueDate) : null,
         };
 
         try {
             const response = await axiosInstance.post('/todos', todoData);
             toast.success('Todo added successfully!');
-
             onAdd && onAdd(response.data);
 
             setFormData({
                 name: '',
                 remark: '',
                 completed: false,
-                dueDate: '',
+                dueDate: getTodayDateString(),
                 priority: 'Medium',
             });
         } catch (error) {
-            const message = error?.response?.data?.error || error.message || 'Something went wrong';
+            const message =
+                error?.response?.data?.error ||
+                error.message ||
+                'Something went wrong';
             toast.error(`Error adding todo: ${message}`);
             console.error(error);
         }
@@ -61,12 +62,21 @@ const TodoForm = ({ onAdd }) => {
     return (
         <form
             onSubmit={handleSubmit}
-            className="w-full max-w-md mx-auto p-6 bg-gray-800 rounded-lg shadow-lg space-y-4"
+            className="w-full max-w-lg mx-auto p-4 sm:p-6 bg-gray-800 rounded-lg shadow-lg space-y-4"
         >
-            <Toaster
-                position="top-right"
-                reverseOrder={false}
-            />
+            <Toaster position="top-right" reverseOrder={false} />
+
+            {/* Header Section */}
+            <div className="text-center border-b border-gray-700 pb-3 mb-4">
+                <h1 className="text-2xl sm:text-3xl font-bold text-white">
+                    📝 My Todo Manager
+                </h1>
+                <p className="text-gray-400 text-sm sm:text-base mt-1">
+                    Stay organized and on top of your tasks
+                </p>
+            </div>
+
+            {/* Form Fields */}
             <div>
                 <label htmlFor="name" className="block text-sm font-medium text-white mb-1">
                     Task Name *
@@ -112,60 +122,45 @@ const TodoForm = ({ onAdd }) => {
                 </label>
             </div>
 
-            <div>
-                <label htmlFor="dueDate" className="block text-sm font-medium text-white mb-1">
-                    Due Date
-                </label>
-                <input
-                    type="date"
-                    name="dueDate"
-                    id="dueDate"
-                    value={formData.dueDate}
-                    onChange={handleChange}
-                    className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white"
-                />
+            <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
+                <div className="flex-1">
+                    <label htmlFor="dueDate" className="block text-sm font-medium text-white mb-1">
+                        Due Date
+                    </label>
+                    <input
+                        type="date"
+                        name="dueDate"
+                        id="dueDate"
+                        value={formData.dueDate}
+                        onChange={handleChange}
+                        className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white"
+                    />
+                </div>
+
+                <div className="flex-1">
+                    <label htmlFor="priority" className="block text-sm font-medium text-white mb-1">
+                        Priority
+                    </label>
+                    <select
+                        name="priority"
+                        id="priority"
+                        value={formData.priority}
+                        onChange={handleChange}
+                        className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white"
+                    >
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
             </div>
 
-            <div>
-                <label htmlFor="priority" className="block text-sm font-medium text-white mb-1">
-                    Priority
-                </label>
-                <select
-                    name="priority"
-                    id="priority"
-                    value={formData.priority}
-                    onChange={handleChange}
-                    className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white"
-                >
-                    <option value="Low">Low</option>
-                    <option value="Medium">Medium</option>
-                    <option value="High">High</option>
-                </select>
-            </div>
-
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
                 <button
-                    type="button"
-                    onClick={handleSubmit}
-                    disabled={mode !== 'Add'}
-                    className={`flex-1 rounded-md py-2 text-white transition ${mode === 'Add'
-                        ? 'bg-green-600 hover:bg-green-700'
-                        : 'bg-green-900 opacity-50 cursor-not-allowed'
-                        }`}
+                    type="submit"
+                    className={`flex-1 rounded-md py-2 text-white transition bg-green-600 cursor-pointer`}
                 >
                     Add
-                </button>
-
-                <button
-                    type="button"
-                    onClick={() => setMode('Read')}
-                    disabled={mode !== 'Read'}
-                    className={`flex-1 rounded-md py-2 text-white transition ${mode === 'Read'
-                        ? 'bg-blue-600 hover:bg-blue-700'
-                        : 'bg-blue-900 opacity-50 cursor-not-allowed'
-                        }`}
-                >
-                    Read
                 </button>
             </div>
         </form>
