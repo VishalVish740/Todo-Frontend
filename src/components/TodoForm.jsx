@@ -15,7 +15,6 @@ const TodoForm = ({ onAdd }) => {
         dueDate: getTodayDateString(),
         priority: 'Medium',
     });
-    const [mode, setMode] = useState('Add');
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -50,10 +49,7 @@ const TodoForm = ({ onAdd }) => {
                 priority: 'Medium',
             });
         } catch (error) {
-            const message =
-                error?.response?.data?.error ||
-                error.message ||
-                'Something went wrong';
+            const message = error?.response?.data?.error || error.message || 'Something went wrong';
             toast.error(`Error adding todo: ${message}`);
             console.error(error);
         }

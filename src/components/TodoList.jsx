@@ -7,6 +7,7 @@ import {
     CheckIcon,
     XMarkIcon,
 } from '@heroicons/react/24/solid';
+import Swal from 'sweetalert2';
 
 const TodoList = () => {
     const [todos, setTodos] = useState([]);
@@ -28,8 +29,7 @@ const TodoList = () => {
             const todosArray = Array.isArray(data.todos) ? data.todos : [];
             setTodos(todosArray);
         } catch (error) {
-            const message =
-                error?.response?.data?.error || error.message || 'Error fetching todos';
+            const message = error?.response?.data?.error || error.message || 'Error fetching todos';
             toast.error(message);
             console.error(error);
         } finally {
@@ -43,13 +43,39 @@ const TodoList = () => {
 
     // Delete Todo
     const handleDelete = async (id) => {
-        if (!window.confirm('Are you sure you want to delete this todo?')) return;
-        try {
-            await axiosInstance.delete(`/todos/${id}`);
-            toast.success('Todo deleted successfully!');
-            setTodos(todos.filter((t) => t._id !== id));
-        } catch (error) {
-            toast.error('Error deleting todo');
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: 'This action cannot be undone!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!',
+            background: '#1f2937', // matches your dark theme
+            color: '#f9fafb',
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await axiosInstance.delete(`/todos/${id}`);
+                Swal.fire({
+                    title: 'Deleted!',
+                    text: 'Your todo has been deleted.',
+                    icon: 'success',
+                    background: '#1f2937',
+                    color: '#f9fafb',
+                    confirmButtonColor: '#10b981',
+                });
+                setTodos(todos.filter((t) => t._id !== id));
+            } catch (error) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Something went wrong while deleting.',
+                    icon: 'error',
+                    background: '#1f2937',
+                    color: '#f9fafb',
+                });
+            }
         }
     };
 

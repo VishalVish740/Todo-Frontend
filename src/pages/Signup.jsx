@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import axiosInstance from '../../axiosInstance';
 import toast, { Toaster } from 'react-hot-toast';
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 
 const Signup = ({ setShowSignup }) => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleSignup = async (e) => {
         e.preventDefault();
@@ -61,23 +63,32 @@ const Signup = ({ setShowSignup }) => {
                         className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-400 transition-all"
                         required
                     />
+                    <div className="relative">
 
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-400 transition-all"
-                        required
-                    />
+                        <input
+                            type={showPassword ? 'text' : 'password'}
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-400 transition-all"
+                            required
+                        />
+                        <button
+                            type="button"
+                            className="absolute inset-y-0 right-3 flex items-center"
+                            onClick={() => setShowPassword(!showPassword)}
+                        >
+                            {showPassword ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
+                        </button>
+                    </div>
                 </div>
 
                 <button
                     type="submit"
                     disabled={loading}
                     className={`mt-6 w-full py-2 rounded-lg text-white font-semibold transition-all duration-300 ${loading
-                            ? 'bg-green-400 cursor-not-allowed'
-                            : 'bg-green-600 hover:bg-green-700 hover:shadow-lg'
+                        ? 'bg-green-400 cursor-not-allowed'
+                        : 'bg-green-600 hover:bg-green-700 hover:shadow-lg'
                         }`}
                 >
                     {loading ? 'Creating Account...' : 'Sign Up'}
