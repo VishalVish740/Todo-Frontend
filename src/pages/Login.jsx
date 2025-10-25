@@ -12,14 +12,22 @@ const Login = ({ setShowSignup, setIsLoggedIn, setShowForgot }) => {
     const handleLogin = async (e) => {
         e.preventDefault();
         setLoading(true);
+
         try {
-            const { data } = await axiosInstance.post('/users/login', { email, password });
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('user', JSON.stringify(data));
-            toast.success('Login successful! Welcome back');
-            setTimeout(() => setIsLoggedIn(true), 1200);
+            const response = await axiosInstance.post('/users/login', { email, password });
+            const resData = response.data;
+
+            if (resData.success === 1) {
+                localStorage.setItem('token', resData.data.token);
+                localStorage.setItem('user', JSON.stringify(resData.data));
+
+                toast.success(resData.message);
+                setTimeout(() => setIsLoggedIn(true), 1200);
+            } else {
+                toast.error(resData.message || 'Login failed');
+            }
         } catch (err) {
-            const message = err.response?.data?.message || 'Invalid credentials';
+            const message = err.response?.data?.message || 'Something went wrong';
             toast.error(message);
         } finally {
             setLoading(false);

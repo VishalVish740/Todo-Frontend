@@ -13,15 +13,22 @@ const Signup = ({ setShowSignup }) => {
     const handleSignup = async (e) => {
         e.preventDefault();
         setLoading(true);
+
         try {
-            const { data } = await axiosInstance.post('/users/signup', {
+            const response = await axiosInstance.post('/users/signup', {
                 username,
                 email,
                 password,
             });
 
-            toast.success(data.message || 'Account created successfully! Please login.');
-            setTimeout(() => setShowSignup(false), 1500);
+            const resData = response.data;
+
+            if (resData.success === 1) {
+                toast.success(resData.message || 'Account created successfully! Please login.');
+                setTimeout(() => setShowSignup(false), 1500);
+            } else {
+                toast.error(resData.message || 'Signup failed');
+            }
         } catch (err) {
             const errorMsg = err.response?.data?.message || 'Signup failed';
             toast.error(errorMsg);

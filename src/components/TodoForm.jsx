@@ -33,13 +33,13 @@ const TodoForm = ({ onAdd }) => {
 
         const todoData = {
             ...formData,
-            dueDate: formData.dueDate ? new Date(formData.dueDate) : null,
+            dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null,
         };
 
         try {
             const response = await axiosInstance.post('/todos', todoData);
             toast.success('Todo added successfully!');
-            onAdd && onAdd(response.data);
+            onAdd && onAdd(response.data.data);
 
             setFormData({
                 name: '',

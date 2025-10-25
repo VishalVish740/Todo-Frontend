@@ -11,6 +11,7 @@ const ForgotPass = ({ setShowLogin }) => {
     const handleReset = async (e) => {
         e.preventDefault();
         setLoading(true);
+
         if (newPassword !== confirmPassword) {
             toast.error('Passwords do not match');
             setLoading(false);
@@ -18,9 +19,15 @@ const ForgotPass = ({ setShowLogin }) => {
         }
 
         try {
-            const { data } = await axiosInstance.post('/users/forgot-password', { email, newPassword });
-            toast.success(data.message);
-            setTimeout(() => setShowLogin(true), 1500); // redirect to login
+            const response = await axiosInstance.post('/users/forgot-password', { email, newPassword });
+            const resData = response.data;
+
+            if (resData.success === 1) {
+                toast.success(resData.message || 'Password reset successfully!');
+                setTimeout(() => setShowLogin(true), 1500); // redirect to login
+            } else {
+                toast.error(resData.message || 'Password reset failed');
+            }
         } catch (err) {
             const message = err.response?.data?.message || 'Reset failed';
             toast.error(message);

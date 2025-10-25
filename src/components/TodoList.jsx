@@ -25,8 +25,7 @@ const TodoList = () => {
         try {
             setLoading(true);
             const response = await axiosInstance.get('/todos');
-            const data = response.data;
-            const todosArray = Array.isArray(data.todos) ? data.todos : [];
+            const todosArray = Array.isArray(response.data.data) ? response.data.data : [];
             setTodos(todosArray);
         } catch (error) {
             const message = error?.response?.data?.error || error.message || 'Error fetching todos';
