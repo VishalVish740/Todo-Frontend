@@ -1,16 +1,80 @@
-# React + Vite
+# Task Manager App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Project Overview
+The Task Manager App is a modern, responsive web application for managing personal tasks. Users can sign up, log in, reset passwords, and perform full CRUD operations on tasks. The project combines a React frontend with a Node.js/MongoDB backend and secure JWT authentication.
 
-Currently, two official plugins are available:
+## Technologies Used
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**Frontend:**  
+- React with Hooks  
+- Tailwind CSS for styling  
+- react-hot-toast for notifications  
 
-## React Compiler
+**Backend:**  
+- Node.js and Express.js  
+- MongoDB with Mongoose  
+- JWT for authentication and authorization  
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+**Communication:**  
+- Axios for API requests  
 
-## Expanding the ESLint configuration
+**State Management:**  
+- React `useState` and props  
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+**Other Features:**  
+- Local storage for storing JWT token and user data  
+- Responsive and interactive UI  
+
+## Components & Features
+
+### 1. Signup Component
+- Allows new users to create an account with username, email, and password.  
+- Shows success/error messages using react-hot-toast.  
+- Redirects to the login page on successful signup.  
+- Clean and responsive design using Tailwind CSS.  
+
+### 2. Login Component
+- Allows existing users to log in using email and password.  
+- Stores JWT token and user data in localStorage.  
+- Redirects logged-in users to the main dashboard.  
+- Provides links to Sign Up and Forgot Password pages.  
+
+### 3. Forgot Password Component
+- Allows users to reset their password.  
+- Users enter email, new password, and confirm password.  
+- Shows success/error messages and redirects to login on success.  
+
+### 4. Task Management Component
+- Perform full **CRUD operations**:  
+  - **Create:** Add new tasks with title and description  
+  - **Read:** View all tasks in a list  
+  - **Update:** Edit task details  
+  - **Delete:** Remove tasks permanently  
+- Real-time updates reflected in UI  
+- Clean and responsive interface for task management  
+
+## API Integration
+- **POST /users/signup** → Register a new user  
+- **POST /users/login** → Log in a user  
+- **POST /users/forgot-password** → Reset password  
+- **GET /tasks** → Fetch all tasks for the logged-in user  
+- **POST /tasks** → Create a new task  
+- **PUT /tasks/:id** → Update a task by ID  
+- **DELETE /tasks/:id** → Delete a task by ID  
+
+## Usage Flow
+
+1. **Sign Up** → **Create** a new account with username, email, and password.  
+2. **Login** → **Authenticate** using your email and password to access the dashboard.  
+3. **Forgot Password** → **Reset** your password if forgotten.  
+4. **Task Management** → **Create, view, edit, delete** tasks in your dashboard.  
+5. **Logout** → **Clear** the token and return to the login page.  
+
+## Future Enhancements
+- Role-based access and permissions  
+- Drag-and-drop task organization  
+- Email notifications for deadlines and reminders  
+- Advanced filtering and search for tasks  
+
+## Conclusion
+This project demonstrates a full authentication and task management flow with reusable React components, modern React best practices, and a clean, responsive UI. The architecture supports easy expansion for additional features and improved UX.
